@@ -19,13 +19,17 @@ def main():
         markdown += f"{data['title']} by {data['authors']}\n\n"
 
         highlights = data["highlights"]
-        lastHighlight = highlights[len(highlights)-1]["location"]["value"]
 
         for h in highlights:
-            markdown += f"{h['location']['value']} of {lastHighlight}\n\n"
+
+            # preserve new lines
+            t = h['text']
+            if t.find("     ") != -1:
+                t = t.replace("     ", "\n\n")
+            markdown += f"{t}\n\n"
+
             if h["note"]:
-                markdown += f"**{h['note']}**\n\n"
-            markdown += f"> {h['text']}\n\n"
+                markdown += f"`{h['note']}`\n\n"
 
     # write output
     with open(output, 'w') as outfile:
